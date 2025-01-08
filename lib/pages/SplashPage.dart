@@ -45,7 +45,7 @@ class _SplashPage extends State<SplashFull> {
     return const MaterialApp(
         home: Scaffold(
       body: Center(
-        child: Text('Welcome to cafe`in'),
+        child: Text('Welcome to BangunanKu'),
       ),
     ));
   }

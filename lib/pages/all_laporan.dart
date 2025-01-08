@@ -45,7 +45,7 @@ class _AllLaporanState extends State<AllLaporan> {
               uid: documents.data()['uid'] ?? '',
               docId: documents.data()['docId'] ?? '',
               judul: documents.data()['judul'] ?? '',
-              instansi: documents.data()['instansi'] ?? '',
+              stok: documents.data()['stok'] ?? '',
               deskripsi: documents.data()['deskripsi'],
               gambar: documents.data()['gambar'],
               nama: documents.data()['nama'] ?? '',

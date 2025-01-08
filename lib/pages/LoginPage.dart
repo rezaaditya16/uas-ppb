@@ -73,8 +73,7 @@ class LoginPageState extends State<LoginPage> {
                                             email = value;
                                           }),
                                       validator: notEmptyValidator,
-                                      decoration:
-                                          customInputDecoration("email"))),
+                                      decoration: customInputDecoration(""))),
                               InputLayout(
                                   'Password',
                                   TextFormField(

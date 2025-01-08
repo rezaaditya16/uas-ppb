@@ -48,7 +48,7 @@ class _MyLaporanState extends State<MyLaporan> {
               uid: documents.data()['uid'],
               docId: documents.data()['docId'],
               judul: documents.data()['judul'],
-              instansi: documents.data()['instansi'],
+              stok: documents.data()['stok'],
               deskripsi: documents.data()['deskripsi'],
               nama: documents.data()['nama'],
               status: documents.data()['status'],
@@ -69,7 +69,7 @@ class _MyLaporanState extends State<MyLaporan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Akun Game'),
+        title: Text('BarangKu'),
       ),
       body: SafeArea(
         child: Container(

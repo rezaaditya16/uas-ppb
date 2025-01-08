@@ -24,7 +24,7 @@ class AddFormState extends State<AddFormPage> {
   bool _isLoading = false;
 
   String? judul;
-  String? instansi;
+  String? stok;
   String? deskripsi;
 
   ImagePicker picker = ImagePicker();
@@ -54,13 +54,13 @@ class AddFormState extends State<AddFormPage> {
                     child: Column(
                       children: [
                         InputLayout(
-                            'Judul',
+                            'Nama Barang',
                             TextFormField(
                                 onChanged: (String value) => setState(() {
                                       judul = value;
                                     }),
                                 validator: notEmptyValidator,
-                                decoration: customInputDecoration("Judul"))),
+                                decoration: customInputDecoration("Nama"))),
                         Container(
                           margin: EdgeInsets.symmetric(vertical: 10),
                         ),
@@ -75,7 +75,7 @@ class AddFormState extends State<AddFormPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(Icons.photo_camera),
-                                  Text(' Foto Akun',
+                                  Text(' Foto Barang',
                                       style: headerStyle(level: 3)),
                                 ],
                               )),
@@ -85,7 +85,7 @@ class AddFormState extends State<AddFormPage> {
                           child: imagePreview(),
                         ),
                         InputLayout(
-                            'Status Akun',
+                            'Status Penjualan',
                             DropdownButtonFormField<String>(
                                 decoration: customInputDecoration('Status'),
                                 items: infoStatus.map((e) {
@@ -94,11 +94,11 @@ class AddFormState extends State<AddFormPage> {
                                 }).toList(),
                                 onChanged: (selected) {
                                   setState(() {
-                                    instansi = selected;
+                                    stok = selected;
                                   });
                                 })),
                         InputLayout(
-                            "Deskripsi Akun",
+                            "Deskripsi Barang",
                             TextFormField(
                               onChanged: (String value) => setState(() {
                                 deskripsi = value;
@@ -240,11 +240,11 @@ class AddFormState extends State<AddFormPage> {
         'uid': _auth.currentUser!.uid,
         'docId': id,
         'judul': judul,
-        'instansi': instansi,
+        'stok': stok,
         'deskripsi': deskripsi,
         'gambar': url,
         'nama': akun.nama,
-        'status': 'Posted', // posted, process, done
+        'status': 'posted', // posted, process, done
         'tanggal': timestamp,
         'maps': maps,
       }).catchError((e) {

@@ -97,8 +97,7 @@ class _DetailPageState extends State<DetailPage> {
                                       'Process', Colors.green, Colors.white)
                                   : textStatus(
                                       'Done', Colors.blue, Colors.white),
-                          textStatus(
-                              laporan.instansi, Colors.white, Colors.black),
+                          textStatus(laporan.stok, Colors.white, Colors.black),
                         ],
                       ),
                       const SizedBox(height: 20),
@@ -134,26 +133,25 @@ class _DetailPageState extends State<DetailPage> {
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         child: Text(laporan.deskripsi ?? ''),
                       ),
-                      if (akun.role == 'admin')
-                        Container(
-                          width: 250,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                status = laporan.status;
-                              });
-                              
-                            },
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              backgroundColor: primaryColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
+                      SizedBox(height: 50),
+                      Container(
+                        width: 250,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              status = laporan.status;
+                            });
+                          },
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: primaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Text('Ubah Status'),
                           ),
+                          child: Text('Ubah Status'),
                         ),
+                      ),
                     ],
                   ),
                 ),

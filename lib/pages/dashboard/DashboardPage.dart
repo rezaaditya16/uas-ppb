@@ -101,6 +101,16 @@ class _DashboardFull extends State<DashboardFull> {
         backgroundColor: primaryColor,
         title: Text('Cafe`in', style: headerStyle(level: 2)),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () async {
+              await _auth.signOut();
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/login', (route) => false);
+            },
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
@@ -117,7 +127,8 @@ class _DashboardFull extends State<DashboardFull> {
         onTap: _onItemTapped,
         selectedItemColor: Colors.white,
         selectedFontSize: 16,
-        unselectedItemColor: Colors.grey[800],
+        unselectedItemColor: Colors.grey[400],
+        unselectedFontSize: 14,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard_outlined),
@@ -137,7 +148,10 @@ class _DashboardFull extends State<DashboardFull> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : pages.elementAt(_selectedIndex),
+          : AnimatedSwitcher(
+              duration: Duration(milliseconds: 300),
+              child: pages.elementAt(_selectedIndex),
+            ),
     );
   }
 }

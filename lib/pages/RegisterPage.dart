@@ -20,6 +20,7 @@ class _RegisterPageState extends State<RegisterPage> {
   String email = '';
   String noHP = '';
   String password = '';
+  String role = 'admin';
 
   Future<void> register() async {
     if (_formKey.currentState!.validate()) {
@@ -38,6 +39,7 @@ class _RegisterPageState extends State<RegisterPage> {
           'nama': nama,
           'email': email,
           'noHP': noHP,
+          'role': role,
         });
 
         // Navigate to login page or dashboard
