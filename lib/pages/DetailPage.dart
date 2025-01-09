@@ -35,7 +35,7 @@ class _DetailPageState extends State<DetailPage> {
           .delete();
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Barang berhasil dihapus')),
+        SnackBar(content: Text('Laporan berhasil dihapus')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -60,14 +60,26 @@ class _DetailPageState extends State<DetailPage> {
             : SingleChildScrollView(
                 child: Container(
                   margin:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-                  width: double.infinity,
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         widget.laporan.barang,
-                        style: headerStyle(level: 3),
+                        style: headerStyle(level: 2),
                       ),
                       SizedBox(height: 15),
                       widget.laporan.gambar != ''
@@ -85,49 +97,65 @@ class _DetailPageState extends State<DetailPage> {
                         ],
                       ),
                       SizedBox(height: 20),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          widget.laporan.deskripsi ?? '',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(height: 20),
                       Text(
-                        widget.laporan.deskripsi ?? '',
+                        'Stok: ${widget.laporan.stok}',
                         style: TextStyle(fontSize: 16),
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'Status: ${widget.laporan.status}',
+                        'Status Barang: ${widget.laporan.status}',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 50),
-                      Container(
-                        width: 250,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            statusDialog(context, widget.laporan);
-                          },
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: primaryColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                      SizedBox(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              statusDialog(context, widget.laporan);
+                            },
+                            icon: Icon(Icons.edit),
+                            label: Text('Ubah Status'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.orange,
+                              foregroundColor: Colors.white,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 15, horizontal: 10),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
                           ),
-                          child: Text('Ubah Status'),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Container(
-                        width: 250,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            deleteLaporan(context, widget.laporan.docId);
-                          },
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.red,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              deleteLaporan(context, widget.laporan.docId);
+                            },
+                            icon: Icon(Icons.delete),
+                            label: Text('Hapus Laporan'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              foregroundColor: Colors.white,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 15, horizontal: 10),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
                           ),
-                          child: Text('Hapus Barang'),
-                        ),
+                        ],
                       ),
                     ],
                   ),
