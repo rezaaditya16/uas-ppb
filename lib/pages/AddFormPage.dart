@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:uas/components/styles.dart';
 import 'package:uas/components/vars.dart';
 import 'package:uas/models/akun.dart';
+import 'package:uas/models/laporan.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import '../components/input_widget.dart';
@@ -26,9 +27,31 @@ class AddFormState extends State<AddFormPage> {
   String? barang;
   String? statuss;
   String? deskripsi;
+  String? kategoriNama;
 
   ImagePicker picker = ImagePicker();
   XFile? file;
+
+  List<Kategori> kategoriList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getKategori();
+  }
+
+  void getKategori() async {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await _firestore.collection('kategori').get();
+    setState(() {
+      kategoriList = querySnapshot.docs.map((doc) {
+        return Kategori(
+          id: doc.data()['id'],
+          nama: doc.data()['nama'],
+        );
+      }).toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,10 +103,10 @@ class AddFormState extends State<AddFormPage> {
                                 ],
                               )),
                         ),
-                        Container(
-                          margin: EdgeInsets.symmetric(vertical: 10),
-                          child: imagePreview(),
-                        ),
+                        // Container(
+                        //   margin: EdgeInsets.symmetric(vertical: 10),
+                        //   child: imagePreview(),
+                        // ),
                         InputLayout(
                             'Status Barang',
                             DropdownButtonFormField<String>(
@@ -109,6 +132,21 @@ class AddFormState extends State<AddFormPage> {
                               decoration: customInputDecoration(
                                   'Deskripsikan semua di sini'),
                             )),
+                        SizedBox(height: 20),
+                        InputLayout(
+                            'Kategori',
+                            DropdownButtonFormField<String>(
+                                decoration: customInputDecoration('Kategori'),
+                                items: kategoriList.map((Kategori kategori) {
+                                  return DropdownMenuItem<String>(
+                                      child: Text(kategori.nama),
+                                      value: kategori.nama);
+                                }).toList(),
+                                onChanged: (selected) {
+                                  setState(() {
+                                    kategoriNama = selected;
+                                  });
+                                })),
                         SizedBox(height: 30),
                         Container(
                           width: double.infinity,
@@ -131,13 +169,13 @@ class AddFormState extends State<AddFormPage> {
     );
   }
 
-  Image imagePreview() {
-    if (file == null) {
-      return Image.asset('assets/istock-default.jpg', width: 180, height: 180);
-    } else {
-      return Image.file(File(file!.path), width: 180, height: 180);
-    }
-  }
+  // Image imagePreview() {
+  //   if (file == null) {
+  //     return Image.asset('assets/istock-default.jpg', width: 180, height: 180);
+  //   } else {
+  //     return Image.file(File(file!.path), width: 180, height: 180);
+  //   }
+  // }
 
   Future<dynamic> uploadDialog(BuildContext context) {
     return showDialog(
@@ -247,6 +285,7 @@ class AddFormState extends State<AddFormPage> {
         'stok': 'Masih ada',
         'tanggal': timestamp,
         'maps': maps,
+        'kategoriNama': kategoriNama,
       }).catchError((e) {
         throw e;
       });

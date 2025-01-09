@@ -69,7 +69,7 @@ class _MyLaporanState extends State<MyLaporan> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Laporan Saya'),
-        backgroundColor: Colors.teal,
+        backgroundColor: const Color.fromARGB(255, 231, 246, 242),
       ),
       body: listLaporan.isEmpty
           ? Center(child: Text('Tidak ada barang'))
@@ -118,10 +118,6 @@ class _MyLaporanState extends State<MyLaporan> {
                           'Tanggal: ${DateFormat('dd MMM yyyy').format(listLaporan[index].tanggal)}',
                           style: TextStyle(color: Colors.grey),
                         ),
-                        SizedBox(height: 10),
-                        listLaporan[index].gambar != null
-                            ? Image.network(listLaporan[index].gambar!)
-                            : Image.asset('assets/istock-default.jpg'),
                         SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {

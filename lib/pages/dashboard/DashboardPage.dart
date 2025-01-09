@@ -69,7 +69,7 @@ class _DashboardPageState extends State<DashboardPage> {
     ];
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.teal,
+        backgroundColor: const Color.fromARGB(255, 165, 201, 202),
         title: Text('TokoKu', style: headerStyle(level: 2)),
         centerTitle: true,
         actions: [

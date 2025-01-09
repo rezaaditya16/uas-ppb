@@ -66,7 +66,7 @@ class _AllLaporanState extends State<AllLaporan> {
     return Scaffold(
       appBar: AppBar(
         title: Text('All Barang'),
-        backgroundColor: Colors.teal,
+        backgroundColor: const Color.fromARGB(255, 231, 246, 242),
       ),
       body: listLaporan.isEmpty
           ? Center(child: Text('Tidak ada barang'))
@@ -111,10 +111,6 @@ class _AllLaporanState extends State<AllLaporan> {
                           'Tanggal: ${DateFormat('dd MMM yyyy').format(listLaporan[index].tanggal)}',
                           style: TextStyle(color: Colors.grey),
                         ),
-                        SizedBox(height: 10),
-                        listLaporan[index].gambar != null
-                            ? Image.network(listLaporan[index].gambar!)
-                            : Image.asset('assets/istock-default.jpg'),
                         SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {

@@ -49,7 +49,8 @@ class _DetailPageState extends State<DetailPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: Text('Detail Barang', style: headerStyle(level: 3, dark: false)),
+        title:
+            Text('Detail Laporan', style: headerStyle(level: 3, dark: false)),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -77,9 +78,12 @@ class _DetailPageState extends State<DetailPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        widget.laporan.barang,
-                        style: headerStyle(level: 2),
+                      Hero(
+                        tag: 'barang-${widget.laporan.docId}',
+                        child: Text(
+                          widget.laporan.barang,
+                          style: headerStyle(level: 2),
+                        ),
                       ),
                       SizedBox(height: 15),
                       widget.laporan.gambar != ''
@@ -110,15 +114,21 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'Statuss: ${widget.laporan.statuss}',
+                        'Stok: ${widget.laporan.stok}',
                         style: TextStyle(fontSize: 16),
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'Stok Barang: ${widget.laporan.stok}',
+                        'Status Barang: ${widget.laporan.statuss}',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
+                      SizedBox(height: 20),
+                      if (widget.laporan.kategoriNama != null)
+                        Text(
+                          'Kategori: ${widget.laporan.kategoriNama}',
+                          style: TextStyle(fontSize: 16),
+                        ),
                       SizedBox(height: 30),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -128,7 +138,7 @@ class _DetailPageState extends State<DetailPage> {
                               statusDialog(context, widget.laporan);
                             },
                             icon: Icon(Icons.edit),
-                            label: Text('Ubah Stok'),
+                            label: Text('UBAH STOK'),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.orange,
                               foregroundColor: Colors.white,
@@ -144,7 +154,7 @@ class _DetailPageState extends State<DetailPage> {
                               deleteLaporan(context, widget.laporan.docId);
                             },
                             icon: Icon(Icons.delete),
-                            label: Text('Hapus Laporan'),
+                            label: Text('HAPUS BARANG'),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red,
                               foregroundColor: Colors.white,

@@ -9,7 +9,7 @@ class Laporan {
   final String stok;
   final DateTime tanggal;
   final String maps;
-  List<Kategori>? kategori;
+  String? kategoriNama;
 
   Laporan({
     required this.uid,
@@ -22,7 +22,7 @@ class Laporan {
     required this.stok,
     required this.tanggal,
     required this.maps,
-    this.kategori,
+    this.kategoriNama,
   });
 }
 

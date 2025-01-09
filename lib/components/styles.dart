@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-var primaryColor = const Color.fromRGBO(0, 173, 181, 1.0);
+var primaryColor = const Color.fromARGB(255, 165, 201, 202);
 var warningColor = const Color(0xFFE9C46A);
 var dangerColor = const Color(0xFFE76F51);
 var successColor = const Color(0xFF2A9D8F);
