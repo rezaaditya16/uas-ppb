@@ -17,6 +17,27 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   bool _isLoading = false;
+  String? kategoriNama;
+
+  @override
+  void initState() {
+    super.initState();
+    getKategoriNama();
+  }
+
+  void getKategoriNama() async {
+    if (widget.laporan.kategoriNama != null &&
+        widget.laporan.kategoriNama!.isNotEmpty) {
+      DocumentSnapshot<Map<String, dynamic>> doc = await FirebaseFirestore
+          .instance
+          .collection('kategori')
+          .doc(widget.laporan.kategoriNama)
+          .get();
+      setState(() {
+        kategoriNama = doc.data()?['nama'];
+      });
+    }
+  }
 
   Future<void> launch(String uri) async {
     if (uri == '') return;
@@ -33,11 +54,11 @@ class _DetailPageState extends State<DetailPage> {
           .delete();
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Laporan berhasil dihapus')),
+        SnackBar(content: Text('Barang berhasil dihapus')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal menghapus laporan: $e')),
+        SnackBar(content: Text('Gagal menghapus barang: $e')),
       );
     }
   }
@@ -47,8 +68,7 @@ class _DetailPageState extends State<DetailPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title:
-            Text('Detail Laporan', style: headerStyle(level: 3, dark: false)),
+        title: Text('Detail Barang', style: headerStyle(level: 3, dark: false)),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -122,11 +142,10 @@ class _DetailPageState extends State<DetailPage> {
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 20),
-                      if (widget.laporan.kategoriNama != null)
-                        Text(
-                          'Kategori: ${widget.laporan.kategoriNama}',
-                          style: TextStyle(fontSize: 16),
-                        ),
+                      Text(
+                        'Kategori: ${kategoriNama ?? 'Bangunan'}',
+                        style: TextStyle(fontSize: 16),
+                      ),
                       SizedBox(height: 30),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -136,7 +155,7 @@ class _DetailPageState extends State<DetailPage> {
                               statusDialog(context, widget.laporan);
                             },
                             icon: Icon(Icons.edit),
-                            label: Text('Ubah Stok'),
+                            label: Text('UBAH STATUS'),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.orange,
                               foregroundColor: Colors.white,
@@ -152,7 +171,7 @@ class _DetailPageState extends State<DetailPage> {
                               deleteLaporan(context, widget.laporan.docId);
                             },
                             icon: Icon(Icons.delete),
-                            label: Text('Hapus Laporan'),
+                            label: Text('HAPUS BARANG'),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red,
                               foregroundColor: Colors.white,
