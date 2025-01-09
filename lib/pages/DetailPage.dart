@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uas/components/status_dialog.dart';
 import 'package:uas/components/styles.dart';
-import 'package:uas/models/akun.dart';
 import 'package:uas/models/laporan.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -9,9 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DetailPage extends StatefulWidget {
   final Laporan laporan;
-  final Akun akun;
 
-  DetailPage({required this.laporan, required this.akun, super.key});
+  DetailPage({required this.laporan, super.key});
 
   @override
   State<StatefulWidget> createState() => _DetailPageState();
@@ -138,7 +136,7 @@ class _DetailPageState extends State<DetailPage> {
                               statusDialog(context, widget.laporan);
                             },
                             icon: Icon(Icons.edit),
-                            label: Text('UBAH STOK'),
+                            label: Text('Ubah Stok'),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.orange,
                               foregroundColor: Colors.white,
@@ -154,7 +152,7 @@ class _DetailPageState extends State<DetailPage> {
                               deleteLaporan(context, widget.laporan.docId);
                             },
                             icon: Icon(Icons.delete),
-                            label: Text('HAPUS BARANG'),
+                            label: Text('Hapus Laporan'),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red,
                               foregroundColor: Colors.white,
