@@ -117,7 +117,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ],
               currentIndex: _selectedIndex,
-              selectedItemColor: Colors.amber[800],
+              selectedItemColor: Colors.teal,
               onTap: _onItemTapped,
             ),
           );
