@@ -23,7 +23,11 @@ void main() async {
       '/register': (context) => const RegisterPage(),
       '/dashboard': (context) => DashboardPage(),
       '/add': (context) => AddFormPage(),
-      '/detail': (context) => DetailPage(),
+      '/detail': (context) => DetailPage(
+            laporan:
+                (ModalRoute.of(context)!.settings.arguments as Map)['laporan'],
+            akun: (ModalRoute.of(context)!.settings.arguments as Map)['akun'],
+          ),
     },
   ));
 }

@@ -99,7 +99,7 @@ class _DashboardFull extends State<DashboardFull> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: Text('Cafe`in', style: headerStyle(level: 2)),
+        title: Text('TokoKu', style: headerStyle(level: 2)),
         centerTitle: true,
         actions: [
           IconButton(

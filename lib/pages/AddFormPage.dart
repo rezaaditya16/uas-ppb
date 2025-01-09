@@ -23,7 +23,7 @@ class AddFormState extends State<AddFormPage> {
 
   bool _isLoading = false;
 
-  String? judul;
+  String? barang;
   String? stok;
   String? deskripsi;
 
@@ -57,7 +57,7 @@ class AddFormState extends State<AddFormPage> {
                             'Nama Barang',
                             TextFormField(
                                 onChanged: (String value) => setState(() {
-                                      judul = value;
+                                      barang = value;
                                     }),
                                 validator: notEmptyValidator,
                                 decoration: customInputDecoration("Nama"))),
@@ -239,7 +239,7 @@ class AddFormState extends State<AddFormPage> {
       await laporanCollection.doc(id).set({
         'uid': _auth.currentUser!.uid,
         'docId': id,
-        'judul': judul,
+        'barang': barang,
         'stok': stok,
         'deskripsi': deskripsi,
         'gambar': url,

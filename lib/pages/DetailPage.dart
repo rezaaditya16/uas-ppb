@@ -5,42 +5,20 @@ import 'package:uas/models/akun.dart';
 import 'package:uas/models/laporan.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DetailPage extends StatefulWidget {
-  DetailPage({super.key});
+  final Laporan laporan;
+  final Akun akun;
+
+  DetailPage({required this.laporan, required this.akun, super.key});
+
   @override
   State<StatefulWidget> createState() => _DetailPageState();
-  void statusDialog(BuildContext context, Laporan laporan) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Ubah Status'),
-          content: Text('Apakah Anda yakin ingin mengubah status laporan ini?'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Batal'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Ubah'),
-              onPressed: () {
-                // Add your status change logic here
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
 
 class _DetailPageState extends State<DetailPage> {
   bool _isLoading = false;
-  String? status;
 
   Future<void> launch(String uri) async {
     if (uri == '') return;
@@ -49,14 +27,25 @@ class _DetailPageState extends State<DetailPage> {
     }
   }
 
+  void deleteLaporan(BuildContext context, String docId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('laporan')
+          .doc(docId)
+          .delete();
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Laporan berhasil dihapus')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal menghapus laporan: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final arguments =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-
-    Laporan laporan = arguments['laporan'];
-    Akun akun = arguments['akun'];
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
@@ -78,69 +67,41 @@ class _DetailPageState extends State<DetailPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        laporan.judul,
+                        widget.laporan.barang,
                         style: headerStyle(level: 3),
                       ),
                       SizedBox(height: 15),
-                      laporan.gambar != ''
-                          ? Image.network(laporan.gambar!)
+                      widget.laporan.gambar != ''
+                          ? Image.network(widget.laporan.gambar!)
                           : Image.asset('assets/istock-default.jpg'),
                       SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          laporan.status == 'Posted'
-                              ? textStatus(
-                                  'Posted', Colors.yellow, Colors.black)
-                              : laporan.status == 'Process'
-                                  ? textStatus(
-                                      'Process', Colors.green, Colors.white)
-                                  : textStatus(
-                                      'Done', Colors.blue, Colors.white),
-                          textStatus(laporan.stok, Colors.white, Colors.black),
+                          Text(
+                            DateFormat('dd MMM yyyy')
+                                .format(widget.laporan.tanggal),
+                            style: TextStyle(color: Colors.grey),
+                          ),
                         ],
                       ),
-                      const SizedBox(height: 20),
-                      ListTile(
-                        leading: Icon(Icons.person),
-                        title: const Center(child: Text('Nama Pelapor')),
-                        subtitle: Center(
-                          child: Text(laporan.nama),
-                        ),
-                        trailing: SizedBox(width: 45),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.date_range),
-                        title: Center(child: Text('Tanggal Laporan')),
-                        subtitle: Center(
-                            child: Text(DateFormat('dd MMMM yyyy')
-                                .format(laporan.tanggal))),
-                        trailing: IconButton(
-                          icon: Icon(Icons.location_on),
-                          onPressed: () {
-                            launch(laporan.maps);
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 50),
+                      SizedBox(height: 20),
                       Text(
-                        'Deskripsi Laporan',
-                        style: headerStyle(level: 3),
+                        widget.laporan.deskripsi ?? '',
+                        style: TextStyle(fontSize: 16),
                       ),
                       SizedBox(height: 20),
-                      Container(
-                        width: double.infinity,
-                        margin: EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(laporan.deskripsi ?? ''),
+                      Text(
+                        'Status: ${widget.laporan.status}',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 50),
                       Container(
                         width: 250,
                         child: ElevatedButton(
                           onPressed: () {
-                            setState(() {
-                              status = laporan.status;
-                            });
+                            statusDialog(context, widget.laporan);
                           },
                           style: TextButton.styleFrom(
                             foregroundColor: Colors.white,
@@ -152,6 +113,23 @@ class _DetailPageState extends State<DetailPage> {
                           child: Text('Ubah Status'),
                         ),
                       ),
+                      SizedBox(height: 20),
+                      Container(
+                        width: 250,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            deleteLaporan(context, widget.laporan.docId);
+                          },
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.red,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Text('Hapus Barang'),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -160,18 +138,12 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
-  Container textStatus(String text, var bgcolor, var textcolor) {
-    return Container(
-      width: 150,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          color: bgcolor,
-          border: Border.all(width: 1, color: primaryColor),
-          borderRadius: BorderRadius.circular(25)),
-      child: Text(
-        text,
-        style: TextStyle(color: textcolor),
-      ),
+  void statusDialog(BuildContext context, Laporan laporan) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatusDialog(laporan: laporan);
+      },
     );
   }
 }

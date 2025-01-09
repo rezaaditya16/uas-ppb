@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:uas/components/styles.dart';
@@ -52,13 +51,13 @@ class _StatusDialogState extends State<StatusDialog> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text(
-              widget.laporan.judul,
+              widget.laporan.barang,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),
             RadioListTile<String>(
-              title: const Text('Posted'),
-              value: 'Posted',
+              title: const Text('baru'),
+              value: 'Baru',
               groupValue: status,
               onChanged: (value) {
                 setState(() {
@@ -67,8 +66,8 @@ class _StatusDialogState extends State<StatusDialog> {
               },
             ),
             RadioListTile<String>(
-              title: const Text('Process'),
-              value: 'Process',
+              title: const Text('Bekas'),
+              value: 'Bekas',
               groupValue: status,
               onChanged: (value) {
                 setState(() {
@@ -77,8 +76,8 @@ class _StatusDialogState extends State<StatusDialog> {
               },
             ),
             RadioListTile<String>(
-              title: const Text('Done'),
-              value: 'Done',
+              title: const Text('Like New'),
+              value: 'Like New',
               groupValue: status,
               onChanged: (value) {
                 setState(() {

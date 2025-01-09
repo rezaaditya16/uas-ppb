@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:uas/models/akun.dart';
 import 'package:intl/intl.dart';
@@ -22,16 +21,11 @@ class ListItem extends StatefulWidget {
 
 class _ListItemState extends State<ListItem> {
   final _firestore = FirebaseFirestore.instance;
-  final _storage = FirebaseStorage.instance;
 
   void deleteLaporan() async {
     try {
       await _firestore.collection('laporan').doc(widget.laporan.docId).delete();
 
-      // menghapus gambar dari storage
-      if (widget.laporan.gambar != '') {
-        await _storage.refFromURL(widget.laporan.gambar!).delete();
-      }
       Navigator.popAndPushNamed(context, '/dashboard');
     } catch (e) {
       print(e);
@@ -46,98 +40,46 @@ class _ListItemState extends State<ListItem> {
           borderRadius: BorderRadius.circular(10)),
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, '/detail', arguments: {
-            'laporan': widget.laporan,
-            'akun': widget.akun,
-          });
+          Navigator.pushNamed(
+            context,
+            '/detail',
+            arguments: {
+              'laporan': widget.laporan,
+              'akun': widget.akun,
+            },
+          );
         },
-        onLongPress: () {
-          if (widget.isLaporanku) {
-            showDialog(
-                context: context,
-                builder: (BuildContext) {
-                  return AlertDialog(
-                    title: Text('Delete ${widget.laporan.judul}?'),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text('Batal'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          deleteLaporan();
-                        },
-                        child: Text('Hapus'),
-                      ),
-                    ],
-                  );
-                });
-          }
-        },
-        child: Column(
-          children: [
-            widget.laporan.gambar != ''
-                ? Image.network(
-                    widget.laporan.gambar!,
-                    width: 130,
-                    height: 130,
-                  )
-                : Image.asset(
-                    'assets/istock-default.jpg',
-                    width: 130,
-                    height: 130,
-                  ),
-            Container(
-              width: double.infinity,
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              decoration: const BoxDecoration(
-                  border: Border.symmetric(horizontal: BorderSide(width: 2))),
-              child: Text(
-                widget.laporan.judul,
-                style: headerStyle(level: 4),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.laporan.barang,
+                style: headerStyle(level: 3),
               ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    decoration: BoxDecoration(
-                        color: warningColor,
-                        borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(5),
-                        ),
-                        border: const Border.symmetric(
-                            vertical: BorderSide(width: 1))),
-                    alignment: Alignment.center,
-                    child: Text(
-                      widget.laporan.status,
-                      style: headerStyle(level: 5, dark: false),
+              SizedBox(height: 5),
+              Text(
+                DateFormat('dd MMM yyyy').format(widget.laporan.tanggal),
+                style: TextStyle(color: Colors.grey),
+              ),
+              SizedBox(height: 5),
+              Text(
+                widget.laporan.deskripsi ?? '',
+                style: TextStyle(fontSize: 16),
+              ),
+              if (widget.isLaporanku)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.delete, color: Colors.red),
+                      onPressed: deleteLaporan,
                     ),
-                  ),
+                  ],
                 ),
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: const BorderRadius.only(
-                            bottomRight: Radius.circular(5)),
-                        border: const Border.symmetric(
-                            vertical: BorderSide(width: 1))),
-                    alignment: Alignment.center,
-                    child: Text(
-                      DateFormat('dd/MM/yyyy').format(widget.laporan.tanggal),
-                      style: headerStyle(level: 5, dark: false),
-                    ),
-                  ),
-                )
-              ],
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );

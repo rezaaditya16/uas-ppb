@@ -1,8 +1,8 @@
 class Laporan {
   final String uid;
   final String docId;
-  final String judul;
-  final String stok;
+  final String barang;
+  final String stok1;
   String? deskripsi;
   String? gambar;
   final String nama;
@@ -14,8 +14,8 @@ class Laporan {
   Laporan({
     required this.uid,
     required this.docId,
-    required this.judul,
-    required this.stok,
+    required this.barang,
+    required this.stok1,
     this.deskripsi,
     this.gambar,
     required this.nama,
