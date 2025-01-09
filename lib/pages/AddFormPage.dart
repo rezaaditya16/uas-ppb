@@ -24,7 +24,7 @@ class AddFormState extends State<AddFormPage> {
   bool _isLoading = false;
 
   String? barang;
-  String? stok;
+  String? statuss;
   String? deskripsi;
 
   ImagePicker picker = ImagePicker();
@@ -85,7 +85,7 @@ class AddFormState extends State<AddFormPage> {
                           child: imagePreview(),
                         ),
                         InputLayout(
-                            'Status Penjualan',
+                            'Status Barang',
                             DropdownButtonFormField<String>(
                                 decoration: customInputDecoration('Status'),
                                 items: infoStatus.map((e) {
@@ -94,7 +94,7 @@ class AddFormState extends State<AddFormPage> {
                                 }).toList(),
                                 onChanged: (selected) {
                                   setState(() {
-                                    stok = selected;
+                                    statuss = selected;
                                   });
                                 })),
                         InputLayout(
@@ -240,11 +240,11 @@ class AddFormState extends State<AddFormPage> {
         'uid': _auth.currentUser!.uid,
         'docId': id,
         'barang': barang,
-        'stok': stok,
+        'statuss': statuss,
         'deskripsi': deskripsi,
         'gambar': url,
         'nama': akun.nama,
-        'status': 'Baru',
+        'stok': 'Masih ada',
         'tanggal': timestamp,
         'maps': maps,
       }).catchError((e) {

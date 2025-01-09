@@ -45,11 +45,11 @@ class _AllLaporanState extends State<AllLaporan> {
               uid: documents.data()['uid'] ?? '',
               docId: documents.data()['docId'] ?? '',
               barang: documents.data()['barang'] ?? '',
-              stok: documents.data()['stok'] ?? '',
+              statuss: documents.data()['statuss'] ?? '',
               deskripsi: documents.data()['deskripsi'],
               gambar: documents.data()['gambar'],
               nama: documents.data()['nama'] ?? '',
-              status: documents.data()['status'] ?? '',
+              stok: documents.data()['stok'] ?? '',
               tanggal: (documents.data()['tanggal'] as Timestamp).toDate(),
               maps: documents.data()['maps'] ?? '',
               komentar: listKomentar,
@@ -70,7 +70,7 @@ class _AllLaporanState extends State<AllLaporan> {
         backgroundColor: Colors.teal,
       ),
       body: listLaporan.isEmpty
-          ? Center(child: Text('Tidak ada laporan'))
+          ? Center(child: Text('Tidak ada barang'))
           : ListView.builder(
               itemCount: listLaporan.length,
               itemBuilder: (context, index) {
@@ -93,10 +93,6 @@ class _AllLaporanState extends State<AllLaporan> {
                           ),
                         ),
                         SizedBox(height: 10),
-                        Text(
-                          'Stok: ${listLaporan[index].stok}',
-                          style: TextStyle(fontSize: 16),
-                        ),
                         SizedBox(height: 10),
                         Text(
                           listLaporan[index].deskripsi ?? '',
@@ -104,7 +100,7 @@ class _AllLaporanState extends State<AllLaporan> {
                         ),
                         SizedBox(height: 10),
                         Text(
-                          'Status: ${listLaporan[index].status}',
+                          'Status: ${listLaporan[index].statuss}',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

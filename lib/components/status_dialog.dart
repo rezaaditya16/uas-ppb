@@ -15,14 +15,14 @@ class StatusDialog extends StatefulWidget {
 }
 
 class _StatusDialogState extends State<StatusDialog> {
-  late String status;
+  late String stok;
   final _firestore = FirebaseFirestore.instance;
 
   void updateStatus() async {
     CollectionReference transaksiCollection = _firestore.collection('laporan');
     try {
       await transaksiCollection.doc(widget.laporan.docId).update({
-        'status': status,
+        'stok': stok,
       });
       Navigator.popAndPushNamed(context, '/dashboard');
     } catch (e) {
@@ -33,7 +33,7 @@ class _StatusDialogState extends State<StatusDialog> {
   @override
   void initState() {
     super.initState();
-    status = widget.laporan.status;
+    stok = widget.laporan.stok;
   }
 
   @override
@@ -56,39 +56,39 @@ class _StatusDialogState extends State<StatusDialog> {
             ),
             SizedBox(height: 20),
             RadioListTile<String>(
-              title: const Text('baru'),
-              value: 'Baru',
-              groupValue: status,
+              title: const Text('Masih'),
+              value: 'Masih',
+              groupValue: stok,
               onChanged: (value) {
                 setState(() {
-                  status = value!;
+                  stok = value!;
                 });
               },
             ),
             RadioListTile<String>(
-              title: const Text('Bekas'),
-              value: 'Bekas',
-              groupValue: status,
+              title: const Text('Habis'),
+              value: 'Habis',
+              groupValue: stok,
               onChanged: (value) {
                 setState(() {
-                  status = value!;
+                  stok = value!;
                 });
               },
             ),
             RadioListTile<String>(
-              title: const Text('Like New'),
-              value: 'Like New',
-              groupValue: status,
+              title: const Text('Proses Restock'),
+              value: 'Proses Restock',
+              groupValue: stok,
               onChanged: (value) {
                 setState(() {
-                  status = value!;
+                  stok = value!;
                 });
               },
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                print(status);
+                print(stok);
                 updateStatus();
               },
               style: TextButton.styleFrom(
@@ -98,7 +98,7 @@ class _StatusDialogState extends State<StatusDialog> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: Text('Simpan Status'),
+              child: Text('Simpan Update Stok'),
             ),
           ],
         ),

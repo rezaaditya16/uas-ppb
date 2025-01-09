@@ -48,10 +48,10 @@ class _MyLaporanState extends State<MyLaporan> {
               uid: documents.data()['uid'],
               docId: documents.data()['docId'],
               barang: documents.data()['barang'],
-              stok: documents.data()['stok'],
+              statuss: documents.data()['statuss'],
               deskripsi: documents.data()['deskripsi'],
               nama: documents.data()['nama'],
-              status: documents.data()['status'],
+              stok: documents.data()['stok'],
               gambar: documents.data()['gambar'],
               tanggal: (documents.data()['tanggal'] as Timestamp).toDate(),
               maps: documents.data()['maps'],
@@ -73,7 +73,7 @@ class _MyLaporanState extends State<MyLaporan> {
         backgroundColor: Colors.teal,
       ),
       body: listLaporan.isEmpty
-          ? Center(child: Text('Tidak ada laporan'))
+          ? Center(child: Text('Tidak ada barang'))
           : ListView.builder(
               itemCount: listLaporan.length,
               itemBuilder: (context, index) {
@@ -97,7 +97,7 @@ class _MyLaporanState extends State<MyLaporan> {
                         ),
                         SizedBox(height: 10),
                         Text(
-                          'Stok: ${listLaporan[index].stok}',
+                          'Statuss: ${listLaporan[index].statuss}',
                           style: TextStyle(fontSize: 16),
                         ),
                         SizedBox(height: 10),
@@ -107,7 +107,7 @@ class _MyLaporanState extends State<MyLaporan> {
                         ),
                         SizedBox(height: 10),
                         Text(
-                          'Status: ${listLaporan[index].status}',
+                          'Stok: ${listLaporan[index].stok}',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

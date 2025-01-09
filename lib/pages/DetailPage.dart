@@ -110,12 +110,12 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'Stok: ${widget.laporan.stok}',
+                        'Statuss: ${widget.laporan.statuss}',
                         style: TextStyle(fontSize: 16),
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'Status Barang: ${widget.laporan.status}',
+                        'Stok Barang: ${widget.laporan.stok}',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
@@ -128,7 +128,7 @@ class _DetailPageState extends State<DetailPage> {
                               statusDialog(context, widget.laporan);
                             },
                             icon: Icon(Icons.edit),
-                            label: Text('Ubah Status'),
+                            label: Text('Ubah Stok'),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.orange,
                               foregroundColor: Colors.white,

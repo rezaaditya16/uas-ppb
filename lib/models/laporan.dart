@@ -2,11 +2,11 @@ class Laporan {
   final String uid;
   final String docId;
   final String barang;
-  final String stok;
+  final String statuss;
   String? deskripsi;
   String? gambar;
   final String nama;
-  final String status;
+  final String stok;
   final DateTime tanggal;
   final String maps;
   List<Komentar>? komentar;
@@ -15,11 +15,11 @@ class Laporan {
     required this.uid,
     required this.docId,
     required this.barang,
-    required this.stok,
+    required this.statuss,
     this.deskripsi,
     this.gambar,
     required this.nama,
-    required this.status,
+    required this.stok,
     required this.tanggal,
     required this.maps,
     this.komentar,
