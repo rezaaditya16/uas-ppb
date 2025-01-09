@@ -14,4 +14,26 @@ class Akun {
     required this.email,
     required this.role,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'uid': uid,
+      'docId': docId,
+      'nama': nama,
+      'noHP': noHP,
+      'email': email,
+      'role': role,
+    };
+  }
+
+  factory Akun.fromMap(Map<String, dynamic> map) {
+    return Akun(
+      uid: map['uid'],
+      docId: map['docId'],
+      nama: map['nama'],
+      noHP: map['noHP'],
+      email: map['email'],
+      role: map['role'],
+    );
+  }
 }
