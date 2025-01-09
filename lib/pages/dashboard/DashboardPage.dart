@@ -98,6 +98,14 @@ class _DashboardPageState extends State<DashboardPage> {
                     });
                   },
                 ),
+                SizedBox(height: 10),
+                FloatingActionButton(
+                  backgroundColor: Colors.blue,
+                  child: Icon(Icons.category, size: 35),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/add_kategori');
+                  },
+                ),
               ],
             ),
             body: pages[_selectedIndex],
@@ -117,7 +125,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ],
               currentIndex: _selectedIndex,
-              selectedItemColor: Colors.teal,
+              selectedItemColor: Colors.amber[800],
               onTap: _onItemTapped,
             ),
           );

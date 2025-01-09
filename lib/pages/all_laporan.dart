@@ -35,7 +35,6 @@ class _AllLaporanState extends State<AllLaporan> {
 
           List<Kategori>? listKomentar = komentarData?.map((map) {
             return Kategori(
-              id: map['id'] ?? '',
               nama: map['nama'] ?? '',
             );
           }).toList();

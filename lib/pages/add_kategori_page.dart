@@ -8,8 +8,7 @@ class AddKategoriPage extends StatefulWidget {
 
 class _AddKategoriPageState extends State<AddKategoriPage> {
   final _formKey = GlobalKey<FormState>();
-  final _idController = TextEditingController();
-  final _namaController = TextEditingController();
+  final TextEditingController _namaController = TextEditingController();
   bool _isLoading = false;
 
   void _addKategori() async {
@@ -20,15 +19,12 @@ class _AddKategoriPageState extends State<AddKategoriPage> {
 
       try {
         await FirebaseFirestore.instance.collection('kategori').add({
-          'id': _idController.text,
           'nama': _namaController.text,
         });
-
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Kategori berhasil ditambahkan')),
         );
-
-        Navigator.pop(context);
+        _namaController.clear();
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Gagal menambahkan kategori: $e')),
@@ -56,21 +52,24 @@ class _AddKategoriPageState extends State<AddKategoriPage> {
               child: Form(
                 key: _formKey,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextFormField(
-                      controller: _idController,
-                      decoration: InputDecoration(labelText: 'ID Kategori'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'ID Kategori tidak boleh kosong';
-                        }
-                        return null;
-                      },
+                    Text(
+                      'Tambah Kategori Baru',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.teal,
+                      ),
                     ),
                     SizedBox(height: 16),
                     TextFormField(
                       controller: _namaController,
-                      decoration: InputDecoration(labelText: 'Nama Kategori'),
+                      decoration: InputDecoration(
+                        labelText: 'Nama Kategori',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.category),
+                      ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Nama Kategori tidak boleh kosong';
@@ -79,18 +78,22 @@ class _AddKategoriPageState extends State<AddKategoriPage> {
                       },
                     ),
                     SizedBox(height: 32),
-                    ElevatedButton(
-                      onPressed: _addKategori,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.teal,
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                    Center(
+                      child: ElevatedButton.icon(
+                        onPressed: _addKategori,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.teal,
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 24),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        'Tambah Kategori',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        icon: Icon(Icons.add, color: Colors.white),
+                        label: Text(
+                          'Tambah Kategori',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
                       ),
                     ),
                   ],

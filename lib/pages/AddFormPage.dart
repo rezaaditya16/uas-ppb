@@ -46,7 +46,6 @@ class AddFormState extends State<AddFormPage> {
     setState(() {
       kategoriList = querySnapshot.docs.map((doc) {
         return Kategori(
-          id: doc.data()['id'],
           nama: doc.data()['nama'],
         );
       }).toList();

@@ -1,37 +1,33 @@
 import 'package:flutter/material.dart';
-import '../components/input_widget.dart';
-import '../components/styles.dart';
-import '../components/validators.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => LoginPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-
-  final _auth = FirebaseAuth.instance;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
 
-  String? email;
-  String? password;
-
-  void login() async {
+  Future<void> login() async {
     setState(() {
       _isLoading = true;
     });
 
     try {
-      await _auth.signInWithEmailAndPassword(
-          email: email!, password: password!);
-
-      Navigator.pushNamedAndRemoveUntil(
-          context, '/dashboard', ModalRoute.withName('/dashboard'));
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      Navigator.pushReplacementNamed(context, '/dashboard');
     } catch (e) {
-      final snackbar = SnackBar(content: Text(e.toString()));
-      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      print('Error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login failed: $e')),
+      );
     } finally {
       setState(() {
         _isLoading = false;
@@ -42,81 +38,112 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 80),
-                    Text('Login', style: headerStyle(level: 2)),
-                    Container(
-                      child: const Text(
-                        'Login to your account',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                    const SizedBox(height: 50),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 30),
-                      child: Form(
-                          key: _formKey,
-                          child: Column(
-                            children: [
-                              InputLayout(
-                                  'Email',
-                                  TextFormField(
-                                      onChanged: (String value) => setState(() {
-                                            email = value;
-                                          }),
-                                      validator: notEmptyValidator,
-                                      decoration: customInputDecoration(""))),
-                              InputLayout(
-                                  'Password',
-                                  TextFormField(
-                                      onChanged: (String value) => setState(() {
-                                            password = value;
-                                          }),
-                                      validator: notEmptyValidator,
-                                      obscureText: true,
-                                      decoration: customInputDecoration(""))),
-                              Container(
-                                margin: EdgeInsets.only(top: 20),
-                                width: double.infinity,
-                                child: FilledButton(
-                                    style: buttonStyle,
-                                    child: Text('Login',
-                                        style:
-                                            headerStyle(level: 3, dark: false)),
-                                    onPressed: () {
-                                      if (_formKey.currentState!.validate()) {
-                                        login();
-                                      }
-                                    }),
-                              )
-                            ],
-                          )),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+      appBar: AppBar(
+        title: Text('Login'),
+        backgroundColor: Colors.teal,
+      ),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Text('Belum punya akun? '),
-                        InkWell(
-                          onTap: () =>
-                              Navigator.pushNamed(context, '/register'),
-                          child: const Text('Daftar di sini',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                        )
+                        Column(
+                          children: [
+                            Text(
+                              'Selamat Datang Kembali!',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.teal,
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            TextFormField(
+                              controller: _emailController,
+                              decoration: InputDecoration(
+                                labelText: 'Email',
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(Icons.email),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Email tidak boleh kosong';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 16),
+                            TextFormField(
+                              controller: _passwordController,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                labelText: 'Password',
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(Icons.lock),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Password tidak boleh kosong';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 32),
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  login();
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.teal,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 16, horizontal: 24),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              icon: Icon(Icons.login, color: Colors.white),
+                              label: Text(
+                                'Login',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 16),
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('Belum punya akun? '),
+                                InkWell(
+                                  onTap: () =>
+                                      Navigator.pushNamed(context, '/register'),
+                                  child: Text(
+                                    'Daftar di sini',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.teal,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ],
-                    )
-                  ],
+                    ),
+                  ),
                 ),
               ),
-      ),
+            ),
     );
   }
 }

@@ -21,7 +21,7 @@ void main() async {
     routes: {
       '/': (context) => const SplashPage(),
       '/login': (context) => LoginPage(),
-      '/register': (context) => const RegisterPage(),
+      '/register': (context) => RegisterPage(),
       '/dashboard': (context) => DashboardPage(),
       '/add': (context) => AddFormPage(),
       '/detail': (context) => DetailPage(
