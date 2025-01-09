@@ -1,7 +1,6 @@
 class Akun {
   final String uid;
   final String docId;
-
   final String nama;
   final String noHP;
   final String email;

@@ -37,10 +37,10 @@ class _MyLaporanState extends State<MyLaporan> {
         for (var documents in querySnapshot.docs) {
           List<dynamic>? komentarData = documents.data()['komentar'];
 
-          List<Komentar>? listKomentar = komentarData?.map((map) {
-            return Komentar(
+          List<Kategori>? listKategori = komentarData?.map((map) {
+            return Kategori(
+              id: map['id'],
               nama: map['nama'],
-              isi: map['isi'],
             );
           }).toList();
           listLaporan.add(
@@ -55,7 +55,6 @@ class _MyLaporanState extends State<MyLaporan> {
               gambar: documents.data()['gambar'],
               tanggal: (documents.data()['tanggal'] as Timestamp).toDate(),
               maps: documents.data()['maps'],
-              komentar: listKomentar,
             ),
           );
         }

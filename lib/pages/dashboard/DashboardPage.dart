@@ -1,81 +1,21 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:uas/components/styles.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uas/models/akun.dart';
 import 'package:uas/pages/all_laporan.dart' as all_laporan;
-import 'package:uas/pages/dashboard/ProfilePage.dart' as profile;
 import 'package:uas/pages/my_laporan.dart' as my_laporan;
+import 'package:uas/pages/dashboard/ProfilePage.dart' as profile;
 
-class DashboardPage extends StatelessWidget {
-  const DashboardPage({super.key});
-
+class DashboardPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return DashboardFull();
-  }
+  _DashboardPageState createState() => _DashboardPageState();
 }
 
-class DashboardFull extends StatefulWidget {
-  const DashboardFull({super.key});
-
-  @override
-  State<StatefulWidget> createState() => _DashboardFull();
-}
-
-class _DashboardFull extends State<DashboardFull> {
+class _DashboardPageState extends State<DashboardPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  late Akun akun;
   int _selectedIndex = 0;
-  List<Widget> pages = [];
-
-  final _auth = FirebaseAuth.instance;
-  final _firestore = FirebaseFirestore.instance;
-
-  Akun akun = Akun(
-    uid: '',
-    docId: '',
-    nama: '',
-    noHP: '',
-    email: '',
-    role: '',
-  );
-
-  bool _isLoading = false;
-
-  void getAkun() async {
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
-          .collection('akun')
-          .where('uid', isEqualTo: _auth.currentUser!.uid)
-          .limit(1)
-          .get();
-
-      if (querySnapshot.docs.isNotEmpty) {
-        var userData = querySnapshot.docs.first.data() as Map<String, dynamic>;
-
-        setState(() {
-          akun = Akun(
-            uid: userData['uid'],
-            nama: userData['nama'],
-            noHP: userData['noHP'],
-            email: userData['email'],
-            docId: userData['docId'],
-            role: userData['role'],
-          );
-        });
-      }
-    } catch (e) {
-      final snackbar = SnackBar(content: Text(e.toString()));
-      ScaffoldMessenger.of(context).showSnackBar(snackbar);
-      print(e);
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
+  late List<Widget> pages;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -89,6 +29,37 @@ class _DashboardFull extends State<DashboardFull> {
     getAkun();
   }
 
+  void getAkun() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+      setState(() {
+        akun = Akun(
+          uid: user.uid,
+          email: user.email!,
+          nama: userDoc['nama'] ?? '',
+          docId: userDoc.id,
+          noHP: userDoc['noHP'] ?? '',
+          role: userDoc['role'] ?? '',
+        );
+      });
+    }
+  }
+
+  TextStyle headerStyle({required int level}) {
+    switch (level) {
+      case 1:
+        return TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
+      case 2:
+        return TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
+      default:
+        return TextStyle(fontSize: 16, fontWeight: FontWeight.normal);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     pages = <Widget>[
@@ -98,7 +69,7 @@ class _DashboardFull extends State<DashboardFull> {
     ];
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: primaryColor,
+        backgroundColor: Colors.teal,
         title: Text('TokoKu', style: headerStyle(level: 2)),
         centerTitle: true,
         actions: [
@@ -112,17 +83,30 @@ class _DashboardFull extends State<DashboardFull> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: primaryColor,
-        child: Icon(Icons.add, size: 35),
-        onPressed: () {
-          Navigator.pushNamed(context, '/add', arguments: {
-            'akun': akun,
-          });
-        },
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            backgroundColor: Colors.teal,
+            child: Icon(Icons.add, size: 35),
+            onPressed: () {
+              Navigator.pushNamed(context, '/add', arguments: {
+                'akun': akun,
+              });
+            },
+          ),
+          SizedBox(height: 10),
+          FloatingActionButton(
+            backgroundColor: Colors.teal,
+            child: Icon(Icons.category, size: 35),
+            onPressed: () {
+              Navigator.pushNamed(context, '/add_kategori');
+            },
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: primaryColor,
+        backgroundColor: Colors.teal,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         selectedItemColor: Colors.white,
@@ -131,27 +115,20 @@ class _DashboardFull extends State<DashboardFull> {
         unselectedFontSize: 14,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard_outlined),
-            label: 'Semua',
+            icon: Icon(Icons.list),
+            label: 'All Laporan',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.book_outlined),
-            label: 'Laporan Saya',
+            icon: Icon(Icons.person),
+            label: 'My Laporan',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outlined),
+            icon: Icon(Icons.account_circle),
             label: 'Profile',
           ),
         ],
       ),
-      body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : AnimatedSwitcher(
-              duration: Duration(milliseconds: 300),
-              child: pages.elementAt(_selectedIndex),
-            ),
+      body: pages[_selectedIndex],
     );
   }
 }

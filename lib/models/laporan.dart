@@ -9,7 +9,7 @@ class Laporan {
   final String stok;
   final DateTime tanggal;
   final String maps;
-  List<Komentar>? komentar;
+  List<Kategori>? kategori;
 
   Laporan({
     required this.uid,
@@ -22,16 +22,16 @@ class Laporan {
     required this.stok,
     required this.tanggal,
     required this.maps,
-    this.komentar,
+    this.kategori,
   });
 }
 
-class Komentar {
+class Kategori {
+  final String id;
   final String nama;
-  final String isi;
 
-  Komentar({
+  Kategori({
+    required this.id,
     required this.nama,
-    required this.isi,
   });
 }

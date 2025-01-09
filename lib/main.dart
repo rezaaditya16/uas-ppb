@@ -7,6 +7,7 @@ import 'package:uas/pages/dashboard/DashboardPage.dart';
 import 'package:uas/pages/DetailPage.dart';
 import 'package:uas/pages/LoginPage.dart';
 import 'package:uas/pages/RegisterPage.dart';
+import 'package:uas/pages/add_kategori_page.dart'; // Pastikan nama file sesuai
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +16,7 @@ void main() async {
   );
 
   runApp(MaterialApp(
-    title: 'cafe`in',
+    title: 'Tokoku',
     initialRoute: '/',
     routes: {
       '/': (context) => const SplashPage(),
@@ -28,6 +29,7 @@ void main() async {
                 (ModalRoute.of(context)!.settings.arguments as Map)['laporan'],
             akun: (ModalRoute.of(context)!.settings.arguments as Map)['akun'],
           ),
+      '/add_kategori': (context) => AddKategoriPage(),
     },
   ));
 }
