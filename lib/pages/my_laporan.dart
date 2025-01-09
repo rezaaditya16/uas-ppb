@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:uas/components/list_item.dart';
 import 'package:uas/models/akun.dart';
 import 'package:uas/models/laporan.dart';
+import 'package:intl/intl.dart';
 
 class MyLaporan extends StatefulWidget {
   final Akun akun;
@@ -53,7 +53,7 @@ class _MyLaporanState extends State<MyLaporan> {
               nama: documents.data()['nama'],
               status: documents.data()['status'],
               gambar: documents.data()['gambar'],
-              tanggal: documents['tanggal'].toDate(),
+              tanggal: (documents.data()['tanggal'] as Timestamp).toDate(),
               maps: documents.data()['maps'],
               komentar: listKomentar,
             ),
@@ -69,30 +69,86 @@ class _MyLaporanState extends State<MyLaporan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('BarangKu'),
+        title: Text('Laporan Saya'),
+        backgroundColor: Colors.teal,
       ),
-      body: SafeArea(
-        child: Container(
-          width: double.infinity,
-          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              childAspectRatio: 1 / 1.234,
+      body: listLaporan.isEmpty
+          ? Center(child: Text('Tidak ada laporan'))
+          : ListView.builder(
+              itemCount: listLaporan.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          listLaporan[index].barang,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'Stok: ${listLaporan[index].stok}',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          listLaporan[index].deskripsi ?? '',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'Status: ${listLaporan[index].status}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.teal,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'Tanggal: ${DateFormat('dd MMM yyyy').format(listLaporan[index].tanggal)}',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        SizedBox(height: 10),
+                        listLaporan[index].gambar != null
+                            ? Image.network(listLaporan[index].gambar!)
+                            : Image.asset('assets/istock-default.jpg'),
+                        SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                              context,
+                              '/detail',
+                              arguments: {
+                                'laporan': listLaporan[index],
+                                'akun': widget.akun,
+                              },
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.teal,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Text('Lihat Detail'),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
-            itemCount: listLaporan.length,
-            itemBuilder: (context, index) {
-              return ListItem(
-                laporan: listLaporan[index],
-                akun: widget.akun,
-                isLaporanku: listLaporan[index].uid == widget.akun.uid,
-              );
-            },
-          ),
-        ),
-      ),
     );
   }
 }
