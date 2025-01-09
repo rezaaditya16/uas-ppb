@@ -48,7 +48,7 @@ class _MyLaporanState extends State<MyLaporan> {
               uid: documents.data()['uid'],
               docId: documents.data()['docId'],
               barang: documents.data()['barang'],
-              stok1: documents.data()['stok1'],
+              stok: documents.data()['stok'],
               deskripsi: documents.data()['deskripsi'],
               nama: documents.data()['nama'],
               status: documents.data()['status'],

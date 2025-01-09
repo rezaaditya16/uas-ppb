@@ -39,7 +39,7 @@ class AddFormState extends State<AddFormPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: Text('Tambah Game', style: headerStyle(level: 3, dark: false)),
+        title: Text('Tambah Barang', style: headerStyle(level: 3, dark: false)),
         centerTitle: true,
       ),
       body: SafeArea(

@@ -35,7 +35,7 @@ class _DetailPageState extends State<DetailPage> {
           .delete();
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Laporan berhasil dihapus')),
+        SnackBar(content: Text('Barang berhasil dihapus')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -49,8 +49,7 @@ class _DetailPageState extends State<DetailPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title:
-            Text('Detail Laporan', style: headerStyle(level: 3, dark: false)),
+        title: Text('Detail Barang', style: headerStyle(level: 3, dark: false)),
         centerTitle: true,
       ),
       body: SafeArea(

@@ -45,7 +45,7 @@ class _AllLaporanState extends State<AllLaporan> {
               uid: documents.data()['uid'] ?? '',
               docId: documents.data()['docId'] ?? '',
               barang: documents.data()['barang'] ?? '',
-              stok1: documents.data()['stok1'] ?? '',
+              stok: documents.data()['stok'] ?? '',
               deskripsi: documents.data()['deskripsi'],
               gambar: documents.data()['gambar'],
               nama: documents.data()['nama'] ?? '',
@@ -66,7 +66,7 @@ class _AllLaporanState extends State<AllLaporan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('BarangKu'),
+        title: Text('All Barang'),
       ),
       body: ListView.builder(
         itemCount: listLaporan.length,
