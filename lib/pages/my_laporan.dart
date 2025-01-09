@@ -96,7 +96,7 @@ class _MyLaporanState extends State<MyLaporan> {
                         ),
                         SizedBox(height: 10),
                         Text(
-                          'Statuss: ${listLaporan[index].statuss}',
+                          'Status: ${listLaporan[index].statuss}',
                           style: TextStyle(fontSize: 16),
                         ),
                         SizedBox(height: 10),
