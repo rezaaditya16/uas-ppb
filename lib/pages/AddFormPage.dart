@@ -244,7 +244,7 @@ class AddFormState extends State<AddFormPage> {
         'deskripsi': deskripsi,
         'gambar': url,
         'nama': akun.nama,
-        'status': 'posted', // posted, process, done
+        'status': 'Baru',
         'tanggal': timestamp,
         'maps': maps,
       }).catchError((e) {
